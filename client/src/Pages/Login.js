@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Card,
   Input,
@@ -7,21 +7,26 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { Link, Navigate } from "react-router-dom";
+import { UserContext } from "../UserContext";
 
 const Login = () => {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const { setUserInfo } = useContext(UserContext);
   const login = async (e) => {
     e.preventDefault();
     const response = await fetch("http://localhost:4000/Login", {
       method: "POST",
       body: JSON.stringify({ password, email }),
       headers: { "Content-Type": "application/json" },
-      credentials: 'include',
+      credentials: "include",
     });
     if (response.ok) {
-      setRedirect(true)
+      response.json().then((userInfo) => {
+        setUserInfo(userInfo);
+        setRedirect(true);
+      });
     } else {
       alert("Error");
     }
@@ -34,10 +39,9 @@ const Login = () => {
     setEmail(e.target.value);
   };
 
-if(redirect){
-  return <Navigate to={'/'} />
-}
- 
+  if (redirect) {
+    return <Navigate to={"/"} />;
+  }
 
   return (
     <div className="flex justify-center items-center h-[70vh]">
