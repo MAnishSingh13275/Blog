@@ -7,7 +7,7 @@ var validateEmail = function(email) {
 };
 
 const UserSchema = new Schema({
-  userName: { type: String, require: true, min: 4, unique: true},
+  username: { type: String, require: true, min: 4, unique: true},
   password: { type: String, require: true, min: 6 },
   email: {
     type: String,

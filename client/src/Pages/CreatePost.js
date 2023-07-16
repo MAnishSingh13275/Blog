@@ -76,7 +76,7 @@ const CreatePost = () => {
 
   return (
     <div>
-      <form className="mt-8 mb-2 flex justify-center" onSubmit={createNewPost}>
+      <form className="mt-8 mb-2 flex justify-center">
         <div className="mb-4 flex flex-col w-[80%] gap-6 text-center ">
           <Input
             size="lg"

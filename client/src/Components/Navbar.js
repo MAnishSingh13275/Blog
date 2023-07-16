@@ -8,7 +8,7 @@ import {
   Card,
   Collapse,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
 const NavBar = () => {
@@ -120,11 +120,12 @@ const NavBar = () => {
       method: "POST",
     });
     setUserInfo(null);
+    <Navigate to={"/Home"}/>
   }
 
   const email = userInfo?.email;
   return (
-    <>
+  
       <Navbar className="sticky top-0 z-10 h-max max-w-full rounded-none py-2 px-4 lg:px-8 lg:py-4">
         <div className="flex items-center justify-between text-blue-gray-900">
           <Typography
@@ -184,7 +185,7 @@ const NavBar = () => {
             </IconButton>
           </div>
         </div>
-        <Collapse open={openNav}>
+        <MobileNav open={openNav}>
           {email && (
             <>
               <div className="mr-4 hidden lg:block">{loggedIn}</div>
@@ -195,9 +196,8 @@ const NavBar = () => {
               <div className="mr-4 hidden lg:block">{notLoggedIn}</div>
             </>
           )}
-        </Collapse>
+        </MobileNav>
       </Navbar>
-    </>
   );
 };
 

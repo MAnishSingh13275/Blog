@@ -6,36 +6,45 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 const SignUp = () => {
-  const [userName, setUserName] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
   const setUser = (e) => {
-    setUserName(e.target.value)
+    setUsername(e.target.value);
   };
   const setPass = (e) => {
-    setPassword(e.target.value)
+    setPassword(e.target.value);
   };
-   const setMail = (e) => {
-    setEmail(e.target.value)
+  const setMail = (e) => {
+    setEmail(e.target.value);
   };
+  const [redirect, setRedirect] = useState(false);
   const register = async (e) => {
     e.preventDefault();
     const response = await fetch("http://localhost:4000/SignUp", {
       method: "POST",
-      body: JSON.stringify({ userName, password, email }),
+      body: JSON.stringify({ username, password, email }),
       headers: { "Content-Type": "application/json" },
     });
     if (response.status === 200) {
-      alert('Registration Done');
+      alert("Registration Done");
+      setRedirect(true);
     }
-    else{
-      alert('Registration Failed! Email/UserName is already registerd')
+    if (username === "" || password === "" || email === "") {
+      alert("All fields are required");
+    }
+    if (response === 400) {
+      alert("User already exists");
     }
   };
+
+  if (redirect) {
+    return <Navigate to={"/Login"} />;
+  }
   return (
     <div className="flex justify-center items-center h-[70vh]">
       <Card color="transparent" shadow={false}>
@@ -57,18 +66,8 @@ const SignUp = () => {
           className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
         >
           <div className="mb-4 flex flex-col gap-6">
-            <Input
-              size="lg"
-              label="Name"
-              value={userName}
-              onChange={setUser}
-            />
-            <Input
-              size="lg"
-              label="Email"
-              value={email}
-              onChange={setMail}
-            />
+            <Input size="lg" label="Name" value={username} onChange={setUser} />
+            <Input size="lg" label="Email" value={email} onChange={setMail} />
             <Input
               type="password"
               size="lg"
@@ -76,9 +75,8 @@ const SignUp = () => {
               value={password}
               onChange={setPass}
             />
-          <Button onClick={register}>Register</Button>
+            <Button onClick={register}>Register</Button>
           </div>
-
         </form>
         <Typography
           id="btn"

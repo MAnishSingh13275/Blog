@@ -24,32 +24,42 @@ mongoose.connect(
 );
 
 app.post("/SignUp", async (req, res) => {
-  const { userName, password, email } = req.body;
+  const { username, password, email } = req.body;
   try {
-    const createUser = await User.create({
-      userName,
-      password: bcrypt.hashSync(password, salt),
-      email,
-    });
-    res.json(createUser);
+    if (username === '' || password === '' || email === '') {
+      res.status(400).json("Fill all Fields")
+    } else {
+      const createUser = await User.create({
+        username,
+        password: bcrypt.hashSync(password, salt),
+        email,
+      });
+      res.json(createUser);
+    }
   } catch (error) {
     res.status(400).json(error);
   }
 });
 app.post("/Login", async (req, res) => {
-  const { password, email } = req.body;
-  const createUser = await User.findOne({ email });
-  const passOk = bcrypt.compareSync(password, createUser.password);
-  if (passOk) {
-    jwt.sign({ email, id: createUser.id }, secret, {}, (err, token) => {
-      if (err) throw err;
-      res.cookie("token", token).json({
-        id: createUser._id,
-        email,
+  
+  try {
+    const {username, email, password} = req.body;
+    const createUser = await User.findOne({ email, username });
+    const passOk = bcrypt.compareSync(password, createUser.password);
+    if (passOk) {
+      jwt.sign({ email,username, id: createUser.id }, secret, {}, (err, token) => {
+        if (err) throw err;
+        res.cookie("token", token).json({
+          id: createUser._id,
+          email,
+          username
+        });
       });
-    });
-  } else {
-    res.status(400).json("Wrong Credentials");
+    } else {
+      res.status(400).json("Wrong Credentials");
+    }
+  } catch (error) {
+    res.status(400).json(error)
   }
 });
 
@@ -87,6 +97,12 @@ app.post("/Post", uploadMiddleware.single("file"), async (req, res) => {
 
 app.get("/Post", async (req, res) => {
   res.json(await Post.find().sort({ createdAt: -1 }).limit(20));
+});
+
+app.get("/post/:id", async (req, res) => {
+  const { id } = req.params;
+  const postDoc = await Post.findById(id);
+  res.json(postDoc);
 });
 
 app.listen(4000);

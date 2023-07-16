@@ -10,6 +10,7 @@ import { Link, Navigate } from "react-router-dom";
 import { UserContext } from "../UserContext";
 
 const Login = () => {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [redirect, setRedirect] = useState(false);
@@ -18,7 +19,7 @@ const Login = () => {
     e.preventDefault();
     const response = await fetch("http://localhost:4000/Login", {
       method: "POST",
-      body: JSON.stringify({ password, email }),
+      body: JSON.stringify({ username, password, email }),
       headers: { "Content-Type": "application/json" },
       credentials: "include",
     });
@@ -28,10 +29,13 @@ const Login = () => {
         setRedirect(true);
       });
     } else {
-      alert("Error");
+      alert("User not found");
     }
   };
 
+  const setUser = (e) => {
+    setUsername(e.target.value);
+  };
   const setPass = (e) => {
     setPassword(e.target.value);
   };
@@ -51,10 +55,16 @@ const Login = () => {
           color="blue-gray"
           className="flex justify-center"
         >
-          Login Up
+          Login
         </Typography>
         <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
           <div className="mb-4 flex flex-col gap-6">
+            <Input
+              size="lg"
+              label="Username"
+              value={username}
+              onChange={setUser}
+            />
             <Input size="lg" label="Email" value={email} onChange={setMail} />
             <Input
               type="password"
