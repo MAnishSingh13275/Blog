@@ -1,16 +1,45 @@
 import { Button, Input } from "@material-tailwind/react";
-import React, { useState } from "react";
-import "react-quill/dist/quill.snow.css";
-import { Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Navigate, useParams } from "react-router-dom";
 import Editor from "../Components/Editor";
 
-
-const CreatePost = () => {
+const EditPage = () => {
+  const { id } = useParams();
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
   const [files, setFiles] = useState("");
   const [redirect, setRedirect] = useState(false);
+  
+  useEffect(() => {
+    fetch("http://localhost:4000/post/" + id).then(response => {
+      response.json().then(postInfo => {
+        setTitle(postInfo.title);
+        setContent(postInfo.content);
+        setSummary(postInfo.summary);
+      });
+    });
+  }, []);
+
+  const UpdatePost = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.set('title', title);
+    data.set('summary', summary);
+    data.set('content', content);
+    data.set('id', id);
+    if (files?.[0]) {
+      data.set('file', files?.[0]);
+    }
+    const response = await fetch('http://localhost:4000/post', {
+      method: 'PUT',
+      body: data,
+      credentials: 'include',
+    });
+    if (response.ok) {
+      setRedirect(true);
+    }
+  };
 
   const addTitle = (e) => {
     setTitle(e.target.value);
@@ -21,29 +50,11 @@ const CreatePost = () => {
   const addFiles = (e) => {
     setFiles(e.target.files);
   };
-  const createNewPost = async (e) => {
-    const data = new FormData();
-    data.set("title", title);
-    data.set("summary", summary);
-    data.set("content", content);
-    data.set("file", files[0]);
 
-    e.preventDefault();
-    console.log(files);
-    const response = await fetch("http://localhost:4000/Post", {
-      method: "POST",
-      body: data,
-      credentials: "include",
-    });
-    if (response.ok) {
-      setRedirect(true);
-    } else {
-      alert("Fields can not be empty");
-    }
-  };
+
 
   if (redirect) {
-    return <Navigate to={"/"} />;
+    return <Navigate to={"/post/" + id} />;
   }
 
   return (
@@ -66,11 +77,11 @@ const CreatePost = () => {
           />
           <Input type="file" size="lg" label="Image" onChange={addFiles} />
           <Editor value={content} onChange={setContent} />
-          <Button onClick={createNewPost}>Create</Button>
+          <Button onClick={UpdatePost}>Update</Button>
         </div>
       </form>
     </div>
   );
 };
 
-export default CreatePost;
+export default EditPage;

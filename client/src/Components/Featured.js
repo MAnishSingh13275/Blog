@@ -5,11 +5,10 @@ import {
   CardBody,
   Typography,
 } from "@material-tailwind/react";
-
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 
-export default function BlogCards({
+export default function Featured({
   title,
   summary,
   cover,
@@ -19,7 +18,7 @@ export default function BlogCards({
   _id,
 }) {
   return (
-    <Card className="grid lg:grid-cols-2 m-5 w-[50vw]">
+    <Card className="grid m-5 w-[25vw]">
       <CardHeader
         shadow={false}
         floated={false}
@@ -33,9 +32,9 @@ export default function BlogCards({
           />
         </Link>
       </CardHeader>
-      <CardBody className="flex flex-col justify-around h-[35vh] p-3">
+      <CardBody className="flex flex-col justify-around h-[30vh] p-3">
         <div className="overflow-clip">
-          <div className="truncate">
+          <div className="h-[35%] overflow-hidden">
             <Link to={`/post/${_id}`} className="">
               <Typography
                 variant="h4"
@@ -54,9 +53,11 @@ export default function BlogCards({
               <time> {format(new Date(createdAt), "MMM d, yyyy HH:mm")}</time>
             </Typography>
           </div>
-          <Typography color="gray" className="font-normal text-ellipsis line-clamp-4">
-            {summary}
-          </Typography>
+          <div className="h-[35%] overflow-hidden">
+            <Typography color="gray" className="font-normal">
+              {summary}
+            </Typography>
+          </div>
         </div>
       </CardBody>
     </Card>
