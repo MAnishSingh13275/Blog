@@ -1,45 +1,32 @@
-import { React } from "react";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  Typography,
-} from "@material-tailwind/react";
+import React from "react";
+import { Card, CardHeader, CardBody, Typography } from "@material-tailwind/react";
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
 
-export default function Featured({
-  title,
-  summary,
-  cover,
-  content,
-  author,
-  createdAt,
-  _id,
-}) {
+const Featured = ({ title, summary, cover, author, createdAt, _id }) => {
   return (
-    <Card className="grid m-5 w-[25vw]">
+    <Card className="grid grid-cols-2 m-5 items-start">
       <CardHeader
         shadow={false}
         floated={false}
-        className="shrink-0 m-2 lg:rounded-r-none rounded"
+        className="rounded m-2"
       >
         <Link to={`/post/${_id}`}>
           <img
             src={"http://localhost:4000/" + cover}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover rounded"
             alt=""
           />
         </Link>
       </CardHeader>
-      <CardBody className="flex flex-col justify-around h-[30vh] p-3">
+      <CardBody className="flex flex-col justify-around p-3">
         <div className="overflow-clip">
-          <div className="h-[35%] overflow-hidden">
+          <div className="truncate">
             <Link to={`/post/${_id}`} className="">
               <Typography
                 variant="h4"
                 color="blue-gray"
-                className="mb-2 capitalize"
+                className="capitalize text-2xl truncate"
               >
                 {title}
               </Typography>
@@ -53,13 +40,13 @@ export default function Featured({
               <time> {format(new Date(createdAt), "MMM d, yyyy HH:mm")}</time>
             </Typography>
           </div>
-          <div className="h-[35%] overflow-hidden">
-            <Typography color="gray" className="font-normal">
-              {summary}
-            </Typography>
-          </div>
+          <Typography color="gray" className="font-normal line-clamp-4 mt-2 truncate">
+            {summary}
+          </Typography>
         </div>
       </CardBody>
     </Card>
   );
-}
+};
+
+export default Featured;

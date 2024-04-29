@@ -19,33 +19,32 @@ export default function BlogCards({
   _id,
 }) {
   return (
-    <Card className="grid lg:grid-cols-2 m-5 w-[50vw]">
+    <Card className="grid lg:grid-row-2 mx-auto mt-5 max-w-[40vw] h-[70vh] overflow-hidden">
       <CardHeader
         shadow={false}
         floated={false}
-        className="shrink-0 m-2 lg:rounded-r-none rounded"
+        className="max-w-full h-[35vh] rounded m-2"
       >
         <Link to={`/post/${_id}`}>
           <img
             src={"http://localhost:4000/" + cover}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-top object-cover rounded"
             alt=""
           />
         </Link>
       </CardHeader>
-      <CardBody className="flex flex-col justify-around h-[35vh] p-3">
-        <div className="overflow-clip">
-          <div className="truncate">
-            <Link to={`/post/${_id}`} className="">
-              <Typography
-                variant="h4"
-                color="blue-gray"
-                className="mb-2 capitalize"
-              >
-                {title}
-              </Typography>
-            </Link>
-          </div>
+      <CardBody className="">
+        <div className="">
+          <Link to={`/post/${_id}`} className="">
+            <Typography
+              variant="h4"
+              color="blue-gray"
+              className=" line-clamp-1"
+            >
+              {title}
+            </Typography>
+          </Link>
+
           <div className="">
             <Typography color="gray" className="font-bold">
               {author.username}
@@ -54,7 +53,7 @@ export default function BlogCards({
               <time> {format(new Date(createdAt), "MMM d, yyyy HH:mm")}</time>
             </Typography>
           </div>
-          <Typography color="gray" className="font-normal text-ellipsis line-clamp-4">
+          <Typography color="gray" className="font-normal line-clamp-4">
             {summary}
           </Typography>
         </div>
