@@ -11,8 +11,8 @@ const Carousel = ({ posts }) => {
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
-    // autoplay: true, // Enable autoplay
-    // autoplaySpeed: 3000, // Set autoplay interval in milliseconds (e.g., 3000ms = 3 seconds)
+    autoplay: true, // Enable autoplay
+    autoplaySpeed: 3000, // Set autoplay interval in milliseconds (e.g., 3000ms = 3 seconds)
     // Adjust these values to change the gap between posts
     slideMargin: 4, // Margin between slides
     cssEase: "linear", // Smooth transition

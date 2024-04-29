@@ -19,9 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
-mongoose.connect(
-  "mongodb+srv://manishsingh13275:Ofdcm5HjAyKsokBM@cluster0.6avok8s.mongodb.net/?retryWrites=true&w=majority"
-);
+mongoose.connect(process.env.MONGODB_URI);
 
 app.post("/SignUp", async (req, res) => {
   const { username, password, email } = req.body;
@@ -135,7 +133,7 @@ app.put("/post", uploadMiddleware.single("file"), async (req, res) => {
       content,
       cover: newPath ? newPath : postDoc.cover,
     });
-    res.json(postDoc)
+    res.json(postDoc);
   });
 });
 
@@ -143,7 +141,6 @@ app.get("/Post", async (req, res) => {
   res.json(await Post.find().populate("author", ["username"]));
 });
 
-// .sort({ createdAt: -1 }).limit(20)
 
 app.get("/post/:id", async (req, res) => {
   const { id } = req.params;
@@ -153,6 +150,5 @@ app.get("/post/:id", async (req, res) => {
 
 app.listen(4000);
 
-//
 
-//mongodb+srv://manishsingh13275:Ofdcm5HjAyKsokBM@cluster0.6avok8s.mongodb.net/?retryWrites=true&w=majority
+
